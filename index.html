@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClearDoc — Understand Any Document in Plain Language</title>
+  <style>
+    :root {
+      --blue: #2563eb;
+      --blue-light: #eff6ff;
+      --blue-dark: #1d4ed8;
+      --red: #dc2626;
+      --red-light: #fef2f2;
+      --green: #16a34a;
+      --green-light: #f0fdf4;
+      --yellow: #d97706;
+      --yellow-light: #fffbeb;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-400: #9ca3af;
+      --gray-600: #4b5563;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--blue);
+      letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--gray-800); }
+    .badge {
+      background: var(--blue-light);
+      color: var(--blue);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 99px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 60px 24px 40px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 800;
+      color: var(--gray-900);
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      margin-bottom: 14px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--blue);
+    }
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--gray-600);
+      line-height: 1.6;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* ── MAIN CARD ── */
+    .main-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      max-width: 780px;
+      margin: 0 auto 40px;
+      padding: 32px;
+    }
+
+    /* ── DOCUMENT TYPE PILLS ── */
+    .label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gray-600);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 10px;
+    }
+    .type-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .type-pill {
+      padding: 7px 14px;
+      border-radius: 99px;
+      border: 1.5px solid var(--gray-200);
+      background: white;
+      font-size: 0.875rem;
+      color: var(--gray-600);
+      cursor: pointer;
+      transition: all 0.15s;
+      font-weight: 500;
+    }
+    .type-pill:hover { border-color: var(--blue); color: var(--blue); }
+    .type-pill.active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: white;
+    }
+
+    /* ── TEXTAREA ── */
+    .doc-textarea {
+      width: 100%;
+      min-height: 200px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--gray-800);
+      resize: vertical;
+      transition: border-color 0.15s;
+      line-height: 1.6;
+      background: var(--gray-50);
+    }
+    .doc-textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      background: white;
+    }
+    .doc-textarea::placeholder { color: var(--gray-400); }
+
+    .char-count {
+      font-size: 0.75rem;
+      color: var(--gray-400);
+      text-align: right;
+      margin-top: 6px;
+    }
+
+    /* ── ANALYZE BUTTON ── */
+    .btn-analyze {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px;
+      margin-top: 20px;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-analyze:hover { background: var(--blue-dark); }
+    .btn-analyze:active { transform: scale(0.99); }
+    .btn-analyze:disabled { background: var(--gray-400); cursor: not-allowed; transform: none; }
+
+    /* ── LOADING ── */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 40px;
+    }
+    .loading.visible { display: block; }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--gray-200);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading p { color: var(--gray-600); font-size: 0.95rem; }
+
+    /* ── RESULTS ── */
+    #results { display: none; margin-top: 32px; }
+    #results.visible { display: block; }
+
+    .result-divider {
+      border: none;
+      border-top: 1px solid var(--gray-200);
+      margin: 28px 0;
+    }
+
+    /* ── RESULT SECTIONS ── */
+    .result-section {
+      margin-bottom: 28px;
+    }
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 14px;
+    }
+    .section-icon {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    /* Summary */
+    .summary-box {
+      background: var(--blue-light);
+      border-left: 3px solid var(--blue);
+      border-radius: 0 8px 8px 0;
+      padding: 16px 18px;
+      color: var(--gray-800);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    /* Key terms */
+    .terms-list { display: flex; flex-direction: column; gap: 10px; }
+    .term-card {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+    .term-name {
+      font-weight: 600;
+      color: var(--gray-900);
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+    .term-explanation {
+      color: var(--gray-600);
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+
+    /* Red flags */
+    .flags-list { display: flex; flex-direction: column; gap: 10px; }
+    .flag-card {
+      border-radius: 8px;
+      padding: 12px 16px;
+      border-left: 3px solid;
+    }
+    .flag-card.high { background: var(--red-light); border-color: var(--red); }
+    .flag-card.medium { background: var(--yellow-light); border-color: var(--yellow); }
+    .flag-card.low { background: var(--green-light); border-color: var(--green); }
+    .flag-severity {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .flag-card.high .flag-severity { color: var(--red); }
+    .flag-card.medium .flag-severity { color: var(--yellow); }
+    .flag-card.low .flag-severity { color: var(--green); }
+    .flag-clause {
+      font-size: 0.8rem;
+      font-style: italic;
+      color: var(--gray-600);
+      margin-bottom: 6px;
+      padding: 4px 8px;
+      background: rgba(0,0,0,0.04);
+      border-radius: 4px;
+    }
+    .flag-explanation {
+      font-size: 0.875rem;
+      color: var(--gray-800);
+      line-height: 1.5;
+    }
+
+    /* Questions */
+    .questions-list { display: flex; flex-direction: column; gap: 8px; }
+    .question-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 14px;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: var(--gray-800);
+      line-height: 1.5;
+    }
+    .question-num {
+      background: var(--blue);
+      color: white;
+      border-radius: 99px;
+      width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── FOLLOW-UP CHAT ── */
+    .followup-section {
+      border-top: 1px solid var(--gray-200);
+      padding-top: 24px;
+      margin-top: 28px;
+    }
+    .chat-history {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+      max-height: 320px;
+      overflow-y: auto;
+    }
+    .chat-bubble {
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      max-width: 90%;
+    }
+    .chat-bubble.user {
+      background: var(--blue);
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 3px;
+    }
+    .chat-bubble.ai {
+      background: var(--gray-100);
+      color: var(--gray-800);
+      align-self: flex-start;
+      border-bottom-left-radius: 3px;
+    }
+    .followup-input-row {
+      display: flex;
+      gap: 8px;
+    }
+    .followup-input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      color: var(--gray-800);
+      transition: border-color 0.15s;
+    }
+    .followup-input:focus { outline: none; border-color: var(--blue); }
+    .btn-ask {
+      padding: 10px 18px;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .btn-ask:hover { background: var(--blue-dark); }
+    .btn-ask:disabled { background: var(--gray-400); cursor: not-allowed; }
+
+    /* ── ERROR ── */
+    .error-box {
+      background: var(--red-light);
+      border: 1px solid #fca5a5;
+      border-radius: 8px;
+      padding: 14px 16px;
+      color: var(--red);
+      font-size: 0.9rem;
+      display: none;
+      margin-top: 12px;
+    }
+    .error-box.visible { display: block; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.8rem;
+      color: var(--gray-400);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .main-card { padding: 20px; margin: 0 12px 32px; }
+      .hero { padding: 40px 16px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Clear<span>Doc</span></div>
+  <span class="badge">FREE PREVIEW</span>
+</header>
+
+<div class="hero">
+  <h1>Understand any document<br><em>in plain language</em></h1>
+  <p>Paste a rental contract, employment agreement, insurance policy, or any confusing document — and get a clear, honest breakdown in seconds.</p>
+</div>
+
+<div class="main-card">
+
+  <div class="label">What type of document is this?</div>
+  <div class="type-grid" id="typeGrid">
+    <button class="type-pill active" data-type="rental contract">🏠 Rental contract</button>
+    <button class="type-pill" data-type="employment contract">💼 Employment contract</button>
+    <button class="type-pill" data-type="insurance policy">🛡️ Insurance policy</button>
+    <button class="type-pill" data-type="government letter">📬 Government letter</button>
+    <button class="type-pill" data-type="terms of service">📄 Terms of service</button>
+    <button class="type-pill" data-type="other document">🔍 Other</button>
+  </div>
+
+  <div class="label">Paste your document below</div>
+  <textarea
+    class="doc-textarea"
+    id="docText"
+    placeholder="Paste the full text of your document here. The more complete it is, the better the analysis will be."
+    oninput="updateCharCount()"
+  ></textarea>
+  <div class="char-count" id="charCount">0 characters</div>
+
+  <button class="btn-analyze" id="analyzeBtn" onclick="analyzeDocument()">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    Analyze Document
+  </button>
+
+  <div class="error-box" id="errorBox"></div>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p>Analyzing your document…</p>
+  </div>
+
+  <div id="results">
+    <hr class="result-divider" />
+
+    <!-- SUMMARY -->
+    <div class="result-section">
+      <div class="section-heading">
+        <div class="section-icon" style="background:#eff6ff">📋</div>
+        Plain Language Summary
+      </div>
+      <div class="summary-box" id="summaryBox"></div>
+    </div>
+
+    <!-- KEY TERMS -->
+    <div class="result-section" id="termsSection">
+      <div class="section-heading">
+        <div class="section-icon" style="background:#f0fdf4">🔑</div>
+        Key Terms Explained
+      </div>
+      <div class="terms-list" id="termsList"></div>
+    </div>
+
+    <!-- RED FLAGS -->
+    <div class="result-section" id="flagsSection">
+      <div class="section-heading">
+        <div class="section-icon" style="background:#fef2f2">🚩</div>
+        Things to Watch Out For
+      </div>
+      <div class="flags-list" id="flagsList"></div>
+    </div>
+
+    <!-- QUESTIONS -->
+    <div class="result-section" id="questionsSection">
+      <div class="section-heading">
+        <div class="section-icon" style="background:#fffbeb">❓</div>
+        Questions You Should Ask
+      </div>
+      <div class="questions-list" id="questionsList"></div>
+    </div>
+
+    <!-- FOLLOW-UP -->
+    <div class="followup-section">
+      <div class="section-heading">
+        <div class="section-icon" style="background:#f5f3ff">💬</div>
+        Ask a follow-up question
+      </div>
+      <div class="chat-history" id="chatHistory"></div>
+      <div class="followup-input-row">
+        <input
+          type="text"
+          class="followup-input"
+          id="followupInput"
+          placeholder="e.g. Can the landlord increase rent during the tenancy?"
+          onkeydown="if(event.key==='Enter') askFollowup()"
+        />
+        <button class="btn-ask" id="askBtn" onclick="askFollowup()">Ask</button>
+      </div>
+    </div>
+
+  </div><!-- /results -->
+
+</div><!-- /main-card -->
+
+<footer>
+  ClearDoc uses AI to help you understand documents. It is not legal advice.<br>
+  Always consult a professional for important decisions.
+</footer>
+
+<script>
+  // ── CONFIG ──
+  // Change this to your deployed backend URL after deploying to Vercel
+  const API_BASE = window.location.origin;
+
+  let selectedType = 'rental contract';
+  let currentDocText = '';
+  let conversationHistory = [];
+
+  // ── DOCUMENT TYPE PILLS ──
+  document.querySelectorAll('.type-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      selectedType = pill.dataset.type;
+    });
+  });
+
+  function updateCharCount() {
+    const len = document.getElementById('docText').value.length;
+    document.getElementById('charCount').textContent = `${len.toLocaleString()} characters`;
+  }
+
+  // ── ANALYZE ──
+  async function analyzeDocument() {
+    const text = document.getElementById('docText').value.trim();
+    if (!text) { showError('Please paste your document text above.'); return; }
+    if (text.length < 50) { showError('The document seems too short. Please paste the full text.'); return; }
+
+    currentDocText = text;
+    conversationHistory = [];
+    document.getElementById('chatHistory').innerHTML = '';
+
+    setLoading(true);
+    hideError();
+    document.getElementById('results').classList.remove('visible');
+
+    try {
+      const res = await fetch(`${API_BASE}/api/analyze`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ document_text: text, document_type: selectedType })
+      });
+      if (!res.ok) throw new Error(`Server error: ${res.status}`);
+      const data = await res.json();
+      renderResults(data);
+    } catch (err) {
+      showError('Something went wrong. Please try again. (' + err.message + ')');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function renderResults(data) {
+    // Summary
+    document.getElementById('summaryBox').textContent = data.summary || 'No summary available.';
+
+    // Key terms
+    const termsList = document.getElementById('termsList');
+    termsList.innerHTML = '';
+    const terms = data.key_terms || [];
+    document.getElementById('termsSection').style.display = terms.length ? '' : 'none';
+    terms.forEach(t => {
+      termsList.innerHTML += `
+        <div class="term-card">
+          <div class="term-name">${esc(t.term)}</div>
+          <div class="term-explanation">${esc(t.explanation)}</div>
+        </div>`;
+    });
+
+    // Red flags
+    const flagsList = document.getElementById('flagsList');
+    flagsList.innerHTML = '';
+    const flags = data.red_flags || [];
+    document.getElementById('flagsSection').style.display = flags.length ? '' : 'none';
+    flags.forEach(f => {
+      const sev = (f.severity || 'medium').toLowerCase();
+      flagsList.innerHTML += `
+        <div class="flag-card ${sev}">
+          <div class="flag-severity">${sev === 'high' ? '⚠️ High concern' : sev === 'medium' ? '⚡ Medium concern' : 'ℹ️ Low concern'}</div>
+          ${f.clause ? `<div class="flag-clause">"${esc(f.clause)}"</div>` : ''}
+          <div class="flag-explanation">${esc(f.explanation)}</div>
+        </div>`;
+    });
+
+    // Questions
+    const questionsList = document.getElementById('questionsList');
+    questionsList.innerHTML = '';
+    const questions = data.questions || [];
+    document.getElementById('questionsSection').style.display = questions.length ? '' : 'none';
+    questions.forEach((q, i) => {
+      questionsList.innerHTML += `
+        <div class="question-item">
+          <div class="question-num">${i + 1}</div>
+          <span>${esc(q)}</span>
+        </div>`;
+    });
+
+    document.getElementById('results').classList.add('visible');
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ── FOLLOW-UP ──
+  async function askFollowup() {
+    const input = document.getElementById('followupInput');
+    const question = input.value.trim();
+    if (!question || !currentDocText) return;
+
+    input.value = '';
+    addChatBubble(question, 'user');
+    document.getElementById('askBtn').disabled = true;
+
+    conversationHistory.push({ role: 'user', content: question });
+
+    try {
+      const res = await fetch(`${API_BASE}/api/followup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          document_text: currentDocText,
+          document_type: selectedType,
+          conversation_history: conversationHistory
+        })
+      });
+      if (!res.ok) throw new Error(`Server error: ${res.status}`);
+      const data = await res.json();
+      const answer = data.answer || 'Sorry, I could not answer that.';
+      addChatBubble(answer, 'ai');
+      conversationHistory.push({ role: 'assistant', content: answer });
+    } catch (err) {
+      addChatBubble('Something went wrong. Please try again.', 'ai');
+    } finally {
+      document.getElementById('askBtn').disabled = false;
+      input.focus();
+    }
+  }
+
+  function addChatBubble(text, role) {
+    const history = document.getElementById('chatHistory');
+    const div = document.createElement('div');
+    div.className = `chat-bubble ${role}`;
+    div.textContent = text;
+    history.appendChild(div);
+    history.scrollTop = history.scrollHeight;
+  }
+
+  // ── HELPERS ──
+  function setLoading(on) {
+    document.getElementById('loading').classList.toggle('visible', on);
+    document.getElementById('analyzeBtn').disabled = on;
+    document.getElementById('analyzeBtn').textContent = on ? 'Analyzing…' : 'Analyze Document';
+  }
+
+  function showError(msg) {
+    const box = document.getElementById('errorBox');
+    box.textContent = msg;
+    box.classList.add('visible');
+  }
+  function hideError() {
+    document.getElementById('errorBox').classList.remove('visible');
+  }
+
+  function esc(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+</script>
+</body>
+</html>
