@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Embodied Awareness — Somatisk bevegelse og helhetlig velvære</title>
+  <meta name="description" content="Workshops, retreater og individuelle sesjoner i somatisk bevegelse og kroppsorientert arbeid. Oslo og omegn." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <nav id="nav">
+    <div class="nav-inner">
+      <a href="#topp" class="logo">Embodied Awareness</a>
+      <button class="burger" aria-label="Meny" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#om">Om</a></li>
+        <li><a href="#tjenester">Tjenester</a></li>
+        <li><a href="#events">Events</a></li>
+        <li><a href="#testimonials">Erfaringer</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#kontakt" class="btn-nav">Book nå</a></li>
+        <li><button class="lang-btn" onclick="toggleLang()">EN</button></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section id="topp" class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-sub" data-no>Somatisk bevegelse · Kroppsorientert arbeid</p>
+      <p class="hero-sub" data-en style="display:none">Somatic movement · Body-oriented practice</p>
+      <h1 data-no>Kom hjem<br>til kroppen din</h1>
+      <h1 data-en style="display:none">Come home<br>to your body</h1>
+      <p class="hero-body" data-no>Workshops og individuelle sesjoner som inviterer deg til å lytte innover — og finne ro, styrke og helhet.</p>
+      <p class="hero-body" data-en style="display:none">Workshops and individual sessions that invite you to listen inward — and find ease, strength and wholeness.</p>
+      <div class="hero-btns">
+        <a href="#events" class="btn-primary" data-no>Se kommende events</a>
+        <a href="#events" class="btn-primary" data-en style="display:none">View upcoming events</a>
+        <a href="#om" class="btn-ghost" data-no>Hvem er jeg?</a>
+        <a href="#om" class="btn-ghost" data-en style="display:none">About me</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="om" class="section om">
+    <div class="container two-col">
+      <div class="om-img"><div class="img-placeholder">[ Ditt bilde her ]</div></div>
+      <div class="om-text">
+        <span class="eyebrow" data-no>Om meg</span>
+        <span class="eyebrow" data-en style="display:none">About me</span>
+        <h2 data-no>[ Ditt navn ]</h2>
+        <h2 data-en style="display:none">[ Your name ]</h2>
+        <p data-no>Skriv din bakgrunn her — trening, utdanning og hva som ledet deg til dette arbeidet. La gjerne leseren forstå hvorfor du brenner for somatisk praksis, og hva som gjør din tilnærming unik.</p>
+        <p data-en style="display:none">Write your background here — training, education, and what led you to this work. Let the reader understand why you're passionate about somatic practice, and what makes your approach unique.</p>
+        <p data-no>Legg gjerne til en setning om din filosofi eller hva du ønsker at deltakere skal ta med seg fra en sesjon med deg.</p>
+        <p data-en style="display:none">Add a sentence about your philosophy or what you wish participants to take away from a session with you.</p>
+        <a href="#kontakt" class="btn-primary" data-no>Ta kontakt</a>
+        <a href="#kontakt" class="btn-primary" data-en style="display:none">Get in touch</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="tjenester" class="section tjenester">
+    <div class="container">
+      <span class="eyebrow center" data-no>Hva jeg tilbyr</span>
+      <span class="eyebrow center" data-en style="display:none">What I offer</span>
+      <h2 class="center" data-no>Tjenester</h2>
+      <h2 class="center" data-en style="display:none">Services</h2>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">○</div>
+          <h3 data-no>Individuelle sesjoner</h3>
+          <h3 data-en style="display:none">Individual sessions</h3>
+          <p data-no>En-til-en sesjoner tilpasset deg og din kropp. Vi arbeider med bevegelse, pust og tilstedeværelse i et trygt og nærende rom.</p>
+          <p data-en style="display:none">One-to-one sessions tailored to you and your body. We work with movement, breath, and presence in a safe and nourishing space.</p>
+          <p class="price" data-no>Fra kr [pris] / 60 min</p>
+          <p class="price" data-en style="display:none">From NOK [price] / 60 min</p>
+          <a href="#kontakt" class="btn-outline" data-no>Book sesjon</a>
+          <a href="#kontakt" class="btn-outline" data-en style="display:none">Book session</a>
+        </div>
+        <div class="card">
+          <div class="card-icon">◇</div>
+          <h3 data-no>Workshops</h3>
+          <h3 data-en style="display:none">Workshops</h3>
+          <p data-no>Gruppebaserte workshops der vi utforsker kropp og bevegelse sammen. Passer for alle — du trenger ingen tidligere erfaring.</p>
+          <p data-en style="display:none">Group-based workshops where we explore body and movement together. Suitable for everyone — no prior experience needed.</p>
+          <p class="price" data-no>Fra kr [pris] / person</p>
+          <p class="price" data-en style="display:none">From NOK [price] / person</p>
+          <a href="#events" class="btn-outline" data-no>Se datoer</a>
+          <a href="#events" class="btn-outline" data-en style="display:none">See dates</a>
+        </div>
+        <div class="card">
+          <div class="card-icon">△</div>
+          <h3 data-no>Retreater</h3>
+          <h3 data-en style="display:none">Retreats</h3>
+          <p data-no>Flerdagers fordypning i rolige omgivelser. Tid til å stoppe opp, lytte til kroppen og komme tilbake til deg selv.</p>
+          <p data-en style="display:none">Multi-day immersions in peaceful surroundings. Time to slow down, listen to your body, and return to yourself.</p>
+          <p class="price" data-no>Fra kr [pris] / person</p>
+          <p class="price" data-en style="display:none">From NOK [price] / person</p>
+          <a href="#kontakt" class="btn-outline" data-no>Få varsel</a>
+          <a href="#kontakt" class="btn-outline" data-en style="display:none">Get notified</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section safety">
+    <div class="container narrow center">
+      <span class="eyebrow" data-no>Trygghet og samtykke</span>
+      <span class="eyebrow" data-en style="display:none">Safety &amp; consent</span>
+      <h2 data-no>Du bestemmer alltid</h2>
+      <h2 data-en style="display:none">You are always in charge</h2>
+      <p data-no>Alle sesjoner og workshops tar utgangspunkt i ditt tempo og dine grenser. Samtykke er en levende del av praksisen — ikke bare et skjema. Du inviteres aldri til noe du ikke selv velger.</p>
+      <p data-en style="display:none">All sessions and workshops move at your pace and within your boundaries. Consent is a living part of the practice — not just a form. You are never invited into anything you haven't chosen yourself.</p>
+    </div>
+  </section>
+
+  <section id="events" class="section events-section">
+    <div class="container">
+      <span class="eyebrow center" data-no>Kommende events</span>
+      <span class="eyebrow center" data-en style="display:none">Upcoming events</span>
+      <h2 class="center" data-no>Book plass</h2>
+      <h2 class="center" data-en style="display:none">Reserve your spot</h2>
+      <div class="events-list">
+        <article class="event-card">
+          <div class="event-date"><span class="day">15</span><span class="month">JUN</span></div>
+          <div class="event-info">
+            <h3 data-no>[ Eventnavn ]</h3>
+            <h3 data-en style="display:none">[ Event name ]</h3>
+            <p class="event-meta" data-no>📍 Oslo · ⏱ 3 timer · 👤 Maks 12 deltakere · 💰 kr [pris]</p>
+            <p class="event-meta" data-en style="display:none">📍 Oslo · ⏱ 3 hours · 👤 Max 12 participants · 💰 NOK [price]</p>
+            <p data-no>Kort beskrivelse av hva vi gjør, hvilken intensitet det har og hva man tar med.</p>
+            <p data-en style="display:none">Brief description of what we do, the intensity level, and what to bring.</p>
+            <div class="event-tags" data-no><span class="tag">Nybegynnervennlig</span><span class="tag">Ta med: komfortabelt tøy</span></div>
+            <div class="event-tags" data-en style="display:none"><span class="tag">Beginner-friendly</span><span class="tag">Bring: comfortable clothes</span></div>
+            <a href="#kontakt" class="btn-primary" data-no>Book plass — kr [pris]</a>
+            <a href="#kontakt" class="btn-primary" data-en style="display:none">Reserve spot — NOK [price]</a>
+          </div>
+        </article>
+        <article class="event-card">
+          <div class="event-date"><span class="day">28</span><span class="month">JUN</span></div>
+          <div class="event-info">
+            <h3 data-no>[ Eventnavn 2 ]</h3>
+            <h3 data-en style="display:none">[ Event name 2 ]</h3>
+            <p class="event-meta" data-no>📍 [ Sted ] · ⏱ [ Varighet ] · 👤 Maks [ antall ] · 💰 kr [pris]</p>
+            <p class="event-meta" data-en style="display:none">📍 [ Venue ] · ⏱ [ Duration ] · 👤 Max [ number ] · 💰 NOK [price]</p>
+            <p data-no>Beskrivelse av eventet her.</p>
+            <p data-en style="display:none">Event description here.</p>
+            <div class="event-tags" data-no><span class="tag">[ Tag ]</span></div>
+            <div class="event-tags" data-en style="display:none"><span class="tag">[ Tag ]</span></div>
+            <a href="#kontakt" class="btn-primary" data-no>Book plass — kr [pris]</a>
+            <a href="#kontakt" class="btn-primary" data-en style="display:none">Reserve spot — NOK [price]</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimonials" class="section testimonials-section">
+    <div class="container">
+      <span class="eyebrow center" data-no>Hva deltakere sier</span>
+      <span class="eyebrow center" data-en style="display:none">What participants say</span>
+      <h2 class="center" data-no>Erfaringer</h2>
+      <h2 class="center" data-en style="display:none">Experiences</h2>
+      <div class="testimonials-grid">
+        <blockquote class="testimonial">
+          <p data-no>«Legg inn et ekte sitat fra en deltaker her. Jo mer spesifikt og personlig, jo bedre.»</p>
+          <p data-en style="display:none">«Add a real quote from a participant here. The more specific and personal, the better.»</p>
+          <footer><div class="t-avatar"></div><div><strong>[ Navn ]</strong><span> · [ Workshop ]</span></div></footer>
+        </blockquote>
+        <blockquote class="testimonial">
+          <p data-no>«Et annet sitat. Prøv å få med 6–8 testimonials totalt — det bygger tillit betraktelig.»</p>
+          <p data-en style="display:none">«Another quote. Try to include 6–8 testimonials total — it builds trust considerably.»</p>
+          <footer><div class="t-avatar"></div><div><strong>[ Navn ]</strong><span> · [ Workshop ]</span></div></footer>
+        </blockquote>
+        <blockquote class="testimonial">
+          <p data-no>«Tredje testimonial — legg til navn og evt. bilde for best effekt.»</p>
+          <p data-en style="display:none">«Third testimonial — add name and optional photo for best effect.»</p>
+          <footer><div class="t-avatar"></div><div><strong>[ Navn ]</strong><span> · [ Workshop ]</span></div></footer>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section class="section newsletter">
+    <div class="container narrow center">
+      <h2 data-no>Hold deg oppdatert</h2>
+      <h2 data-en style="display:none">Stay in the loop</h2>
+      <p data-no>Få varsel om nye workshops, retreater og refleksjoner fra praksisen — rett i innboksen.</p>
+      <p data-en style="display:none">Get notified about new workshops, retreats and reflections from the practice — straight to your inbox.</p>
+      <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+        <input type="email" placeholder="Din e-postadresse" required />
+        <button type="submit" class="btn-primary">Meld meg på</button>
+      </form>
+      <p class="small">Ingen spam. Avmeld når som helst.</p>
+    </div>
+  </section>
+
+  <section id="faq" class="section faq-section">
+    <div class="container narrow">
+      <span class="eyebrow center">FAQ</span>
+      <h2 class="center">FAQ</h2>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary data-no>Trenger jeg erfaring med bevegelse eller meditasjon?</summary>
+          <summary data-en style="display:none">Do I need experience with movement or meditation?</summary>
+          <p data-no>Nei. Alt arbeidet tar utgangspunkt i der du er akkurat nå. Du trenger ingen bakgrunn i dans, yoga eller meditasjon.</p>
+          <p data-en style="display:none">No. All the work starts from where you are right now. You need no background in dance, yoga, or meditation.</p>
+        </details>
+        <details class="faq-item">
+          <summary data-no>Hva er somatisk arbeid?</summary>
+          <summary data-en style="display:none">What is somatic work?</summary>
+          <p data-no>Praksiser som arbeider med kroppen innenfra — gjennom bevissthet, bevegelse, pust og sansning. Det handler om å lytte til kroppen fremfor å prestere.</p>
+          <p data-en style="display:none">Practices that work with the body from the inside — through awareness, movement, breath, and sensation. It's about listening rather than performing.</p>
+        </details>
+        <details class="faq-item">
+          <summary data-no>Hva tar jeg med?</summary>
+          <summary data-en style="display:none">What should I bring?</summary>
+          <p data-no>Komfortabelt tøy du kan bevege deg i. Ta med vann og evt. en tynn ullgenser til avslutning.</p>
+          <p data-en style="display:none">Comfortable clothes you can move in. Bring water and optionally a thin layer for the closing.</p>
+        </details>
+        <details class="faq-item">
+          <summary data-no>Er det berøring involvert?</summary>
+          <summary data-en style="display:none">Is touch involved?</summary>
+          <p data-no>I workshops er det ingen obligatorisk berøring. I individuelle sesjoner kan lett berøring forekomme — alltid med ditt eksplisitte samtykke.</p>
+          <p data-en style="display:none">In workshops there is no obligatory touch. In individual sessions, light touch may occur — always with your explicit consent.</p>
+        </details>
+        <details class="faq-item">
+          <summary data-no>Kan jeg delta med skader eller begrensninger?</summary>
+          <summary data-en style="display:none">Can I participate with injuries or limitations?</summary>
+          <p data-no>Ja, i de fleste tilfeller. Ta kontakt på forhånd så vi kan finne ut hva som passer for deg.</p>
+          <p data-en style="display:none">Yes, in most cases. Reach out beforehand and we'll figure out what works for you.</p>
+        </details>
+        <details class="faq-item">
+          <summary data-no>Hva er avbestillingspolitikken?</summary>
+          <summary data-en style="display:none">What is the cancellation policy?</summary>
+          <p data-no>Full refusjon mer enn 7 dager før. 50% refusjon 3–7 dager før. Ingen refusjon under 3 dager, men plassen kan overføres.</p>
+          <p data-en style="display:none">Full refund more than 7 days before. 50% refund 3–7 days before. No refund under 3 days, but the spot can be transferred.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt" class="section contact-section">
+    <div class="container narrow center">
+      <span class="eyebrow" data-no>Klar til å starte?</span>
+      <span class="eyebrow" data-en style="display:none">Ready to begin?</span>
+      <h2 data-no>Ta kontakt</h2>
+      <h2 data-en style="display:none">Get in touch</h2>
+      <p data-no>Book plass, still spørsmål eller hør om tilpassede opplegg for din gruppe eller bedrift.</p>
+      <p data-en style="display:none">Book a spot, ask a question, or enquire about tailored programmes for your group or organisation.</p>
+      <form class="contact-form" onsubmit="handleContact(event)">
+        <div class="form-row">
+          <input type="text" placeholder="Navn" required />
+          <input type="email" placeholder="E-post" required />
+        </div>
+        <select>
+          <option value="">Hva gjelder det?</option>
+          <option>Individuell sesjon</option>
+          <option>Workshop / event</option>
+          <option>Retreat</option>
+          <option>Bedrift / gruppe</option>
+          <option>Annet</option>
+        </select>
+        <textarea rows="5" placeholder="Melding"></textarea>
+        <button type="submit" class="btn-primary" data-no>Send melding</button>
+        <button type="submit" class="btn-primary" data-en style="display:none">Send message</button>
+      </form>
+      <div class="contact-alt">
+        <p data-no>Eller send e-post direkte: <a href="mailto:hei@embodiedawareness.no">hei@embodiedawareness.no</a></p>
+        <p data-en style="display:none">Or email directly: <a href="mailto:hei@embodiedawareness.no">hello@embodiedawareness.no</a></p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand"><p class="logo">Embodied Awareness</p><p>Oslo, Norge</p></div>
+      <nav class="footer-links">
+        <a href="#om" data-no>Om</a><a href="#om" data-en style="display:none">About</a>
+        <a href="#tjenester" data-no>Tjenester</a><a href="#tjenester" data-en style="display:none">Services</a>
+        <a href="#events">Events</a>
+        <a href="#faq">FAQ</a>
+        <a href="#kontakt" data-no>Kontakt</a><a href="#kontakt" data-en style="display:none">Contact</a>
+      </nav>
+      <div class="footer-social"><a href="#">Instagram</a></div>
+    </div>
+    <p class="footer-copy">© 2025 Embodied Awareness · <a href="#">Personvern</a></p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
