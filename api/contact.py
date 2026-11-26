@@ -1,46 +1,45 @@
 """
 Embodied Awareness — /api/contact
-Handles contact form submissions and sends email via Gmail SMTP.
-Environment variables required in Vercel:
-  GMAIL_APP_PASSWORD  — Google App Password for embodied.awareness.no@gmail.com
+Sends contact form submissions via Resend API.
+Environment variable required in Vercel:
+  RESEND_API_KEY  — API key from resend.com
 """
 from http.server import BaseHTTPRequestHandler
 import json
 import os
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+import urllib.request
+import urllib.error
 
-GMAIL_USER = "embodied.awareness.no@gmail.com"
-GMAIL_TO   = "embodied.awareness.no@gmail.com"
+RESEND_API = "https://api.resend.com/emails"
+TO_EMAIL   = "embodied.awareness.no@gmail.com"
+FROM_EMAIL = "onboarding@resend.dev"
 
 
 def send_email(name: str, email: str, topic: str, message: str) -> None:
-    password = os.environ.get("GMAIL_APP_PASSWORD", "")
-    if not password:
-        raise RuntimeError("GMAIL_APP_PASSWORD not set")
+    api_key = os.environ.get("RESEND_API_KEY", "")
+    if not api_key:
+        raise RuntimeError("RESEND_API_KEY not set")
 
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = f"[Embodied Awareness] {topic} – {name}"
-    msg["From"]    = GMAIL_USER
-    msg["To"]      = GMAIL_TO
-    msg["Reply-To"] = email
+    payload = json.dumps({
+        "from":     FROM_EMAIL,
+        "to":       [TO_EMAIL],
+        "reply_to": email,
+        "subject":  f"[Embodied Awareness] {topic} – {name}",
+        "text":     f"Navn: {name}\nE-post: {email}\nGjelder: {topic}\n\n{message}"
+    }).encode()
 
-    body = f"""\
-Ny henvendelse fra embodiedawareness.no
-
-Navn:    {name}
-E-post:  {email}
-Gjelder: {topic}
-
-{message}
-"""
-    msg.attach(MIMEText(body, "plain", "utf-8"))
-
-    with smtplib.SMTP("smtp.gmail.com", 587) as server:
-        server.starttls()
-        server.login(GMAIL_USER, password)
-        server.sendmail(GMAIL_USER, GMAIL_TO, msg.as_string())
+    req = urllib.request.Request(
+        RESEND_API,
+        data=payload,
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type":  "application/json"
+        },
+        method="POST"
+    )
+    with urllib.request.urlopen(req) as resp:
+        if resp.status not in (200, 201):
+            raise RuntimeError(f"Resend error {resp.status}")
 
 
 class handler(BaseHTTPRequestHandler):
@@ -51,10 +50,8 @@ class handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         try:
-            length = int(self.headers.get("Content-Length", 0))
-            raw = self.rfile.read(length)
-            data = json.loads(raw)
-
+            length  = int(self.headers.get("Content-Length", 0))
+            data    = json.loads(self.rfile.read(length))
             name    = data.get("name", "").strip()
             email   = data.get("email", "").strip()
             topic   = data.get("topic", "Generell henvendelse").strip()
@@ -74,13 +71,13 @@ class handler(BaseHTTPRequestHandler):
         payload = json.dumps(body).encode()
         self.send_response(code)
         self._cors()
-        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Type",   "application/json")
         self.send_header("Content-Length", str(len(payload)))
         self.end_headers()
         self.wfile.write(payload)
 
     def _cors(self) -> None:
-        self.send_header("Access-Control-Allow-Origin", "https://embodiedawareness.no")
+        self.send_header("Access-Control-Allow-Origin",  "https://embodiedawareness.no")
         self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
 
