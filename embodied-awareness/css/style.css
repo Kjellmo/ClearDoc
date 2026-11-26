@@ -56,20 +56,42 @@ a { color: inherit; text-decoration: none; }
 .burger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
 .burger span { display: block; width: 24px; height: 1.5px; background: var(--earth); }
 
-.hero { min-height: 100vh; display: flex; align-items: center; position: relative; background: var(--earth); background-image: linear-gradient(135deg, #3D2E20 0%, #5C4430 60%, #7A6248 100%); padding: 8rem 2rem 6rem; }
-.hero-overlay { position: absolute; inset: 0; background: url('../images/hero.jpg') center/cover no-repeat; opacity: 0.35; }
-.hero-content { position: relative; max-width: var(--max-w); margin: 0 auto; width: 100%; }
+.hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; background: var(--earth); background-image: linear-gradient(160deg, #2A1E12 0%, #3D2E20 50%, #5C4430 100%); padding: 8rem 2rem 6rem; text-align: center; }
+.hero-overlay { position: absolute; inset: 0; background: url('../images/henrik-hiking.jpg') center/cover no-repeat; opacity: 0.22; }
+.hero-content { position: relative; max-width: 760px; margin: 0 auto; width: 100%; }
 .hero-sub { font-size: 0.78rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--warm); margin-bottom: 1.5rem; }
-.hero h1 { color: var(--cream); margin-bottom: 1.5rem; }
-.hero-body { color: rgba(247,243,238,0.82); font-size: 1.1rem; margin-bottom: 2.5rem; max-width: 50ch; }
-.hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+.hero h1 { color: var(--cream); margin-bottom: 1.5rem; font-style: italic; }
+.hero-body { color: rgba(247,243,238,0.82); font-size: 1.1rem; margin-bottom: 2.5rem; max-width: 55ch; margin-left: auto; margin-right: auto; }
+.hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+/* Three panels */
+.panels { display: grid; grid-template-columns: repeat(3, 1fr); min-height: 420px; }
+.panel { padding: 4rem 3rem; display: flex; align-items: flex-end; }
+.panel-green { background: #3B5041; color: rgba(255,255,255,0.9); }
+.panel-olive { background: #6B6440; color: rgba(255,255,255,0.9); }
+.panel-terra { background: #8C5040; color: rgba(255,255,255,0.9); }
+.panel-inner { width: 100%; }
+.panel-num { display: block; font-size: 0.72rem; letter-spacing: 0.2em; opacity: 0.6; margin-bottom: 1.5rem; font-weight: 500; }
+.panel h3 { color: #fff; font-size: clamp(1.6rem, 2.5vw, 2.2rem); margin-bottom: 1rem; font-style: italic; }
+.panel p { font-size: 0.92rem; line-height: 1.75; opacity: 0.85; max-width: 38ch; }
 
 .om { background: var(--white); }
 .om-img { border-radius: 2px; overflow: hidden; aspect-ratio: 3/4; }
+.om-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .img-placeholder { width: 100%; height: 100%; min-height: 400px; background: var(--sand); display: flex; align-items: center; justify-content: center; color: var(--bark); font-size: 0.85rem; }
 .om-text h2 { margin-bottom: 1.5rem; }
 .om-text p { margin-bottom: 1.2rem; color: #444; }
 .om-text a { margin-top: 1rem; }
+.credentials { font-size: 0.82rem !important; color: var(--bark) !important; background: var(--sand); padding: 0.75rem 1rem; border-radius: var(--radius); border-left: 3px solid var(--warm); }
+
+.approach { background: var(--sand); }
+.approach h2 { margin-bottom: 1.5rem; }
+.approach > .container > p { margin: 0 auto 1rem; color: #555; }
+.approach-pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem; text-align: left; }
+.pillar { background: var(--white); padding: 2rem; border-radius: 2px; }
+.pillar-icon { font-size: 1.3rem; color: var(--warm); display: block; margin-bottom: 0.75rem; }
+.pillar h4 { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 400; color: var(--earth); margin-bottom: 0.6rem; }
+.pillar p { font-size: 0.9rem; color: #555; max-width: none; }
 
 .tjenester { background: var(--cream); }
 .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem; }
@@ -151,6 +173,9 @@ a { color: inherit; text-decoration: none; }
   .cards { grid-template-columns: 1fr; }
   .testimonials-grid { grid-template-columns: 1fr; }
   .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
+  .panels { grid-template-columns: 1fr; min-height: auto; }
+  .panel { padding: 3rem 2rem; align-items: flex-start; }
+  .approach-pillars { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 700px) {

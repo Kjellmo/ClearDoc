@@ -1,0 +1,619 @@
+<title>Embodied Awareness</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #ECEAE4;
+  --fg:       #1A2018;
+  --mid:      #68796A;
+  --subtle:   #C6C3BA;
+  --surface:  #FFFFFF;
+  --border:   #D6D3CB;
+  --accent:   #3A5836;
+  --accent2:  #5C7A56;
+  --p1:       #2A3D2D;
+  --p2:       #484730;
+  --p3:       #643828;
+  --serif:    'Cormorant Garamond', Georgia, serif;
+  --sans:     'DM Sans', system-ui, sans-serif;
+  --max:      1140px;
+  --narrow:   720px;
+  --r:        3px;
+  --ease:     0.22s ease;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141A14; --fg: #E4E2D8; --mid: #849882; --subtle: #2E3830;
+    --surface: #1C231C; --border: #2A342A; --accent: #7EAA76; --accent2: #9ABE92;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141A14; --fg: #E4E2D8; --mid: #849882; --subtle: #2E3830;
+  --surface: #1C231C; --border: #2A342A; --accent: #7EAA76; --accent2: #9ABE92;
+  color-scheme: dark;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:var(--sans);font-weight:300;color:var(--fg);background:var(--bg);
+  line-height:1.72;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:300;line-height:1.15}
+h1{font-size:clamp(3rem,8vw,6.5rem);font-style:italic;letter-spacing:-0.01em}
+h2{font-size:clamp(2rem,4.5vw,3.4rem)}
+h3{font-size:clamp(1.4rem,2.5vw,2rem)}
+h4{font-size:1.1rem;font-weight:400}
+p{font-size:1rem;max-width:64ch;line-height:1.75}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+
+.wrap{max-width:var(--max);margin:0 auto;padding:0}
+.narrow{max-width:var(--narrow);margin:0 auto}
+.center{text-align:center}
+.center p{margin-left:auto;margin-right:auto}
+.sec{padding:6rem 0}
+.eyebrow{display:block;font-family:var(--sans);font-size:.72rem;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:.8rem}
+
+.btn{display:inline-block;padding:.82rem 2rem;border-radius:var(--r);
+  font-size:.9rem;font-weight:400;letter-spacing:.03em;cursor:pointer;
+  transition:all var(--ease);border:none;font-family:var(--sans)}
+.btn-dark{background:var(--fg);color:var(--bg)}
+.btn-dark:hover{opacity:.82}
+.btn-outline{background:transparent;color:var(--fg);border:1.5px solid var(--fg)}
+.btn-outline:hover{background:var(--fg);color:var(--bg)}
+.btn-link{color:var(--accent2);font-size:.87rem;font-weight:500;
+  border-bottom:1px solid var(--accent2);transition:color var(--ease),border-color var(--ease)}
+.btn-link:hover{color:var(--accent);border-color:var(--accent)}
+
+#nav{
+  position:fixed;top:env(safe-area-inset-top,0px);left:0;width:100%;z-index:200;
+  background:color-mix(in srgb,var(--bg) 92%,transparent);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
+  transition:box-shadow var(--ease)
+}
+body::before{
+  content:"";position:fixed;inset:0 0 auto;
+  height:env(safe-area-inset-top,0px);z-index:201;background:var(--bg)
+}
+#nav.scrolled{box-shadow:0 2px 24px color-mix(in srgb,var(--fg) 8%,transparent)}
+.nav-inner{
+  max-width:var(--max);margin:0 auto;height:66px;
+  display:flex;align-items:center;justify-content:space-between;gap:2rem
+}
+.logo{font-family:var(--serif);font-size:1.25rem;font-weight:400;color:var(--fg);white-space:nowrap}
+.nav-links{display:flex;align-items:center;gap:1.8rem;list-style:none}
+.nav-links a{font-size:.87rem;color:var(--mid);transition:color var(--ease)}
+.nav-links a:hover{color:var(--fg)}
+.nav-cta{padding:.5rem 1.2rem;border-radius:var(--r);background:var(--fg);color:var(--bg);
+  font-size:.85rem;transition:opacity var(--ease)}
+.nav-cta:hover{opacity:.8}
+.burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.burger span{display:block;width:22px;height:1.5px;background:var(--fg)}
+
+.hero{
+  min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;padding:calc(env(safe-area-inset-top,0px) + 7rem) 0 5rem;
+  text-align:center;overflow:hidden;
+  background:var(--p1)
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 70% at 50% 60%,
+    color-mix(in srgb,var(--p2) 60%,transparent),
+    var(--p1) 70%);
+  opacity:.7
+}
+.hero-noise{
+  position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+  opacity:.4
+}
+.hero-inner{position:relative;max-width:860px;margin:0 auto}
+.hero-tag{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;
+  color:color-mix(in srgb,#B8D4B0 80%,transparent);margin-bottom:2rem;
+  font-family:var(--sans);font-weight:500}
+.hero h1{color:#F2EDE4;margin-bottom:1.6rem}
+.hero-body{color:rgba(242,237,228,.72);font-size:1.1rem;margin-bottom:3rem;
+  max-width:52ch;margin-left:auto;margin-right:auto}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.hero .btn-dark{background:#F2EDE4;color:var(--p1)}
+.hero .btn-dark:hover{background:#fff}
+.hero .btn-outline{border-color:rgba(242,237,228,.4);color:#F2EDE4}
+.hero .btn-outline:hover{background:rgba(242,237,228,.12);border-color:#F2EDE4}
+.hero-scroll{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  color:rgba(242,237,228,.35);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase}
+.hero-scroll-line{width:1px;height:40px;background:rgba(242,237,228,.2);
+  animation:scrollLine 2s ease-in-out infinite}
+@keyframes scrollLine{0%,100%{transform:scaleY(1);opacity:.4}50%{transform:scaleY(.4);opacity:.1}}
+
+.panels{display:grid;grid-template-columns:repeat(3,1fr)}
+.panel{padding:4rem 3rem 3.5rem;display:flex;flex-direction:column;justify-content:flex-end;min-height:380px;position:relative;overflow:hidden}
+.panel-green{background:var(--p1)}
+.panel-olive{background:var(--p2)}
+.panel-terra{background:var(--p3)}
+.panel::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse 100% 100% at 50% 110%,rgba(255,255,255,.04),transparent)}
+.panel-num{font-family:var(--serif);font-size:3.5rem;font-weight:300;font-style:italic;
+  color:rgba(255,255,255,.12);line-height:1;margin-bottom:auto;padding-bottom:1.5rem}
+.panel h3{font-style:italic;color:#fff;margin-bottom:.85rem}
+.panel p{font-size:.93rem;line-height:1.75;color:rgba(255,255,255,.75);max-width:34ch}
+
+.om{background:var(--surface)}
+.om .wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:5rem;align-items:center}
+.om-photo{border-radius:2px;overflow:hidden;aspect-ratio:4/5;background:var(--subtle)}
+.om-photo img{width:100%;height:100%;object-fit:cover}
+.om-text h2{margin-bottom:1.5rem}
+.om-text p{color:color-mix(in srgb,var(--fg) 72%,var(--bg));margin-bottom:1.1rem}
+.cred{
+  display:inline-block;font-size:.8rem;line-height:1.6;
+  background:var(--bg);padding:.7rem 1rem;border-radius:var(--r);
+  border-left:3px solid var(--accent2);color:var(--mid);margin:.6rem 0 1.4rem
+}
+
+.approach{background:var(--bg)}
+.approach h2{margin-bottom:1.2rem}
+.approach > .wrap > p{color:color-mix(in srgb,var(--fg) 70%,transparent);margin:0 auto 3rem}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:1rem}
+.pillar{background:var(--surface);padding:2rem 1.8rem;border-radius:var(--r);border:1px solid var(--border)}
+.pillar-mark{font-family:var(--serif);font-size:1.6rem;color:var(--accent2);
+  font-style:italic;display:block;margin-bottom:.8rem}
+.pillar h4{color:var(--fg);margin-bottom:.5rem}
+.pillar p{font-size:.9rem;color:var(--mid);max-width:none;line-height:1.7}
+
+.tjenester{background:var(--surface)}
+.tjenester h2{margin-bottom:.5rem}
+.tjenester > .wrap > p{color:var(--mid);margin-bottom:3rem}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.card{border:1px solid var(--border);padding:2.4rem 2rem;border-radius:var(--r);
+  display:flex;flex-direction:column;gap:.6rem;background:var(--bg);transition:border-color var(--ease)}
+.card:hover{border-color:var(--accent2)}
+.card-mark{font-family:var(--serif);font-size:1.3rem;font-style:italic;color:var(--accent2)}
+.card h3{font-size:clamp(1.2rem,2vw,1.5rem)}
+.card > p{font-size:.93rem;color:var(--mid);flex:1;line-height:1.7;max-width:none}
+.card-detail{font-family:var(--serif);font-size:1rem;color:var(--accent2);font-style:italic;margin-top:.2rem}
+
+.safety{background:var(--p1);color:#F2EDE4}
+.safety .eyebrow{color:rgba(184,212,176,.7)}
+.safety h2{color:#F2EDE4;margin-bottom:1.4rem}
+.safety p{color:rgba(242,237,228,.75);margin:0 auto}
+
+.events{background:var(--bg)}
+.event-list{display:flex;flex-direction:column;gap:1.5rem;margin-top:3rem}
+.event-card{
+  display:grid;grid-template-columns:72px 1fr;gap:2.5rem;
+  padding:2.2rem 2.5rem;border:1px solid var(--border);
+  border-radius:var(--r);background:var(--surface);align-items:start;
+  transition:border-color var(--ease)
+}
+.event-card:hover{border-color:var(--accent2)}
+.event-date{text-align:center;padding-top:.15rem}
+.ev-day{display:block;font-family:var(--serif);font-size:3rem;font-weight:300;
+  line-height:1;color:var(--accent);font-style:italic}
+.ev-mon{display:block;font-size:.7rem;letter-spacing:.15em;font-weight:500;
+  color:var(--mid);text-transform:uppercase;margin-top:.15rem}
+.event-info h3{margin-bottom:.4rem;font-size:clamp(1.2rem,2vw,1.5rem)}
+.event-meta{font-size:.84rem;color:var(--mid);margin-bottom:.7rem}
+.event-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin:.7rem 0 1.1rem}
+.tag{font-size:.74rem;padding:.28rem .7rem;background:var(--subtle);
+  color:var(--mid);border-radius:100px}
+.event-info p{font-size:.93rem;color:var(--mid);max-width:60ch;line-height:1.7;margin-bottom:.4rem}
+
+.newsletter{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.newsletter h2{margin-bottom:.8rem}
+.newsletter > .wrap > p{color:var(--mid);margin-bottom:2rem}
+.nl-form{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center}
+.nl-form input{
+  flex:1;min-width:220px;padding:.82rem 1.15rem;
+  border:1px solid var(--border);background:var(--bg);
+  border-radius:var(--r);font-size:.95rem;font-family:var(--sans);color:var(--fg);outline:none;
+  transition:border-color var(--ease)
+}
+.nl-form input:focus{border-color:var(--accent2)}
+
+.faq{background:var(--bg)}
+.faq h2{margin-bottom:.5rem}
+.faq-list{margin-top:3rem}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-item summary{
+  padding:1.3rem 0;font-family:var(--serif);font-size:1.2rem;cursor:pointer;
+  list-style:none;display:flex;justify-content:space-between;align-items:center;
+  color:var(--fg);transition:color var(--ease)
+}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary:hover{color:var(--accent)}
+.faq-item summary::after{content:'+';font-family:var(--sans);font-weight:300;
+  font-size:1.4rem;color:var(--mid);transition:transform var(--ease);flex-shrink:0;margin-left:1rem}
+.faq-item[open] summary::after{transform:rotate(45deg)}
+.faq-item p{padding:0 2rem 1.4rem 0;color:var(--mid);font-size:.95rem}
+
+.kontakt{background:var(--surface)}
+.kontakt h2{margin-bottom:.8rem}
+.kontakt > .wrap > p{color:var(--mid);margin-bottom:2rem}
+.contact-form{display:flex;flex-direction:column;gap:.85rem;margin-top:1.5rem;text-align:left}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+.contact-form input,.contact-form select,.contact-form textarea{
+  width:100%;padding:.88rem 1.1rem;border:1px solid var(--border);background:var(--bg);
+  border-radius:var(--r);font-size:.95rem;font-family:var(--sans);color:var(--fg);outline:none;
+  transition:border-color var(--ease)
+}
+.contact-form input:focus,.contact-form select:focus,.contact-form textarea:focus{border-color:var(--accent2)}
+.contact-form select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7B68' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center}
+.contact-form textarea{resize:vertical}
+.contact-form .btn{align-self:flex-start}
+.contact-alt{margin-top:1.5rem;font-size:.9rem;color:var(--mid)}
+.contact-alt a{color:var(--accent2);border-bottom:1px solid var(--accent2)}
+.form-success{display:none;padding:1.2rem;background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--r);text-align:center;color:var(--accent);font-family:var(--serif);font-style:italic;font-size:1.2rem}
+
+.footer{background:color-mix(in srgb,var(--fg) 97%,transparent);color:rgba(228,226,216,.55);padding:3.5rem 0 2rem}
+.footer-inner{display:grid;grid-template-columns:1fr auto auto;gap:3rem;align-items:start;
+  padding-bottom:2rem;border-bottom:1px solid rgba(228,226,216,.08);margin-bottom:1.5rem}
+.footer-brand .logo{color:rgba(228,226,216,.9);display:block;margin-bottom:.4rem;font-family:var(--serif);font-size:1.2rem}
+.footer-links{display:flex;flex-direction:column;gap:.55rem}
+.footer-links a{font-size:.84rem;transition:color var(--ease)}
+.footer-links a:hover{color:rgba(228,226,216,.9)}
+.footer-social a{font-size:.84rem;transition:color var(--ease)}
+.footer-social a:hover{color:rgba(228,226,216,.9)}
+.footer-copy{text-align:center;font-size:.77rem}
+
+@media(max-width:960px){
+  .om .wrap{grid-template-columns:1fr;gap:3rem}
+  .om-photo{max-width:420px;margin:0 auto;aspect-ratio:4/3}
+  .cards{grid-template-columns:1fr}
+  .pillars{grid-template-columns:1fr}
+  .footer-inner{grid-template-columns:1fr;gap:2rem}
+}
+@media(max-width:760px){
+  .panels{grid-template-columns:1fr}
+  .panel{min-height:280px;padding:3rem 2rem}
+  .sec{padding:4rem 0}
+  .burger{display:flex}
+  .nav-links{
+    display:none;position:absolute;top:66px;left:0;width:100%;
+    background:var(--bg);flex-direction:column;padding:1.5rem 2rem 2rem;
+    gap:1.1rem;border-bottom:1px solid var(--border);
+    box-shadow:0 8px 24px color-mix(in srgb,var(--fg) 8%,transparent)
+  }
+  .nav-links.open{display:flex}
+  .event-card{grid-template-columns:56px 1fr;gap:1.5rem;padding:1.5rem}
+  .form-row{grid-template-columns:1fr}
+  .hero-btns{flex-direction:column;align-items:center}
+  .nl-form{flex-direction:column;align-items:center}
+  .nl-form input{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
+.reveal.shown{opacity:1;transform:none}
+</style>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner wrap">
+    <a href="#top" class="logo" aria-label="Embodied Awareness"><img src="" alt="Embodied Awareness" style="height:44px;width:44px;display:block"></a>
+    <button class="burger" aria-label="Menu" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#approach">Approach</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#events">Events</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#contact" class="nav-cta">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="top" class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-inner wrap">
+    <p class="hero-tag">Body · Research · Community · Oslo</p>
+    <h1>The body knows<br>the way home</h1>
+    <p class="hero-body">Working at the intersection of physical and mental health — through research, movement practice, and international collaboration.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn btn-dark">Get in touch</a>
+      <a href="#about" class="btn btn-outline">About Henrik</a>
+    </div>
+  </div>
+  <div class="hero-scroll" aria-hidden="true">
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<!-- PANELS -->
+<section class="panels">
+  <div class="panel panel-green">
+    <div class="panel-num">01</div>
+    <h3>Body</h3>
+    <p>The nervous system carries the story of all we have lived through. Body-oriented work helps release stuck patterns and open space for the new — gently, at your pace.</p>
+  </div>
+  <div class="panel panel-olive">
+    <div class="panel-num">02</div>
+    <h3>Research</h3>
+    <p>Practice grounded in neurobiology and trauma research. Staying current through international collaboration and ongoing professional development in body-based approaches.</p>
+  </div>
+  <div class="panel panel-terra">
+    <div class="panel-num">03</div>
+    <h3>Community</h3>
+    <p>Healing doesn't happen in isolation. Through workshops, group practice, and events we create spaces where many can grow and move forward together.</p>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="sec om">
+  <div class="wrap">
+    <div class="om-photo reveal">
+      <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:100%;height:100%;background:var(--subtle)">
+        <text x="200" y="260" text-anchor="middle" font-family="Georgia,serif" font-size="14" fill="var(--mid)" font-style="italic">Henrik Kjellmo Larsen</text>
+      </svg>
+    </div>
+    <div class="om-text">
+      <span class="eyebrow">About me</span>
+      <h2>Henrik Kjellmo Larsen</h2>
+      <p>I work at the intersection of physical and mental health — through research, movement, and international collaboration. My practice is built on over a decade of teaching and facilitating, more than 600 hours of professional training across hot yoga (Bikram-affiliated), Embodied Yin, and neuroscience for somatics, and I am currently deepening that foundation through the Somatic Experiencing Practitioner (SEP) training programme.</p>
+      <p>Through these threads — the stillness of yin practice, the neuroscience of how the body holds and releases stress, and the relational intelligence of facilitation — I help individuals and groups come home to themselves. I work with people one-to-one and in groups, and collaborate with international practitioners to develop the field further.</p>
+      <span class="cred">600+ hours of professional training · Hot yoga teacher (Bikram-affiliated) · Embodied Yin · Neuroscience for Somatics · Somatic Experiencing (SEP programme, in progress)</span>
+      <a href="#contact" class="btn btn-dark">Get in touch</a>
+    </div>
+  </div>
+</section>
+
+<!-- APPROACH -->
+<section id="approach" class="sec approach">
+  <div class="wrap narrow center">
+    <span class="eyebrow">My approach</span>
+    <h2>Body-oriented work</h2>
+    <p>My practice weaves together several disciplines: yoga and Embodied Yin as ways of meeting the body with stillness and curiosity; neuroscience for somatics as a framework for understanding how the nervous system learns, adapts, and heals; and training in Somatic Experiencing (SE), a physiological approach to trauma and stress developed by Peter A. Levine. The common thread across all of them is the same — listening to what the body holds, and meeting it with patience and care.</p>
+  </div>
+  <div class="wrap pillars" style="margin-top:3rem">
+    <div class="pillar reveal">
+      <span class="pillar-mark">I</span>
+      <h4>Body before mind</h4>
+      <p>We work with physical sensations and impulses, not only with thoughts and stories. The body often knows what the mind hasn't caught up with yet.</p>
+    </div>
+    <div class="pillar reveal">
+      <span class="pillar-mark">II</span>
+      <h4>Your pace</h4>
+      <p>Nothing is forced. We follow the nervous system's natural rhythm — not a clinical checklist. Slowing down is often the most important move.</p>
+    </div>
+    <div class="pillar reveal">
+      <span class="pillar-mark">III</span>
+      <h4>Resource-oriented</h4>
+      <p>We build capacity and inner resources just as much as we process difficult experiences. What supports you matters as much as what challenges you.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WORK / SERVICES -->
+<section id="work" class="sec tjenester">
+  <div class="wrap">
+    <span class="eyebrow">What I offer</span>
+    <h2>Work together</h2>
+    <p style="color:var(--mid);margin-bottom:3rem">One-to-one, in a group, or for your organisation.</p>
+    <div class="cards">
+      <div class="card reveal">
+        <div class="card-mark">○</div>
+        <h3>Individual sessions</h3>
+        <p>One-to-one sessions drawing on body-oriented and movement-based approaches. We work with what your nervous system brings — whether that's stress, overwhelm, chronic tension, or a wish to feel more at home in yourself.</p>
+        <span class="card-detail">60 · 90 min · Oslo &amp; online</span>
+        <a href="#contact" class="btn-link">Book a session</a>
+      </div>
+      <div class="card reveal">
+        <div class="card-mark">◇</div>
+        <h3>Workshops &amp; groups</h3>
+        <p>Group-based workshops exploring body, movement and presence together. Primal Play and Ekte Møter i Blomstring are two events I hold regularly. No previous experience required.</p>
+        <span class="card-detail">Varies per event</span>
+        <a href="#events" class="btn-link">See upcoming events</a>
+      </div>
+      <div class="card reveal">
+        <div class="card-mark">△</div>
+        <h3>Organisations</h3>
+        <p>Tailored processes for companies, teams, and professional communities. Combining body-based knowledge with facilitation and process work in a form that fits your context.</p>
+        <span class="card-detail">Price on request</span>
+        <a href="#contact" class="btn-link">Get in touch</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SAFETY -->
+<section class="sec safety">
+  <div class="wrap narrow center">
+    <span class="eyebrow">Safety &amp; consent</span>
+    <h2>You are always in charge</h2>
+    <p>All sessions and workshops move at your pace and within your boundaries. Consent is not a form you fill in — it is something we practise actively throughout the whole process. You are never invited into anything you haven't chosen yourself.</p>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section id="events" class="sec events">
+  <div class="wrap">
+    <span class="eyebrow center">Upcoming events</span>
+    <h2 class="center">Reserve your spot</h2>
+    <div class="event-list">
+      <article class="event-card reveal">
+        <div class="event-date">
+          <span class="ev-day" style="font-size:1.5rem;padding-top:.5rem">Apr</span>
+          <span class="ev-mon">11–14</span>
+        </div>
+        <div class="event-info">
+          <h3>Primal Play Retreat</h3>
+          <p class="event-meta">📅 April 11–14 · 📍 Venue to be announced</p>
+          <p>Four days of immersion in play, movement and body presence. The Primal Play retreat is a space to slow down, reconnect with impulse and joy — and meet ourselves and each other genuinely. Limited spots.</p>
+          <div class="event-tags"><span class="tag">Retreat · 4 days</span><span class="tag">Limited spots</span></div>
+          <a href="#contact" class="btn btn-dark">Express interest</a>
+        </div>
+      </article>
+      <article class="event-card reveal">
+        <div class="event-date">
+          <span class="ev-day" style="font-size:1.4rem;padding-top:.4rem">Jan→</span>
+          <span class="ev-mon">2025</span>
+        </div>
+        <div class="event-info">
+          <h3>Primal Play</h3>
+          <p class="event-meta">📅 Monthly from January · 📍 Oslo</p>
+          <p>Primal Play is back — monthly evenings of play, impulse and movement. A practice exploring freedom and presence through the body. No experience required.</p>
+          <div class="event-tags"><span class="tag">Beginner-friendly</span><span class="tag">Bring: comfortable clothes</span></div>
+          <a href="#contact" class="btn btn-dark">Express interest</a>
+        </div>
+      </article>
+      <article class="event-card reveal">
+        <div class="event-date">
+          <span class="ev-day" style="font-size:2rem;padding-top:.35rem">∞</span>
+          <span class="ev-mon">2025</span>
+        </div>
+        <div class="event-info">
+          <h3>Ekte Møter i Blomstring</h3>
+          <p class="event-meta">📍 Oslo · 👤 Limited spots</p>
+          <p>An event about what happens between people when we slow down and meet genuinely. Combining movement, body awareness, and conversation to create deep contact — with yourself and with others.</p>
+          <div class="event-tags"><span class="tag">Movement</span><span class="tag">Deep contact</span><span class="tag">Body awareness</span></div>
+          <a href="#contact" class="btn btn-dark">Get notified of next date</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="sec newsletter">
+  <div class="wrap narrow center">
+    <h2>Stay in the loop</h2>
+    <p>Get notified about new events and reflections from the practice — straight to your inbox.</p>
+    <form class="nl-form" id="nlForm" onsubmit="handleNL(event)">
+      <input type="email" placeholder="Your email address" required>
+      <button type="submit" class="btn btn-dark">Subscribe</button>
+    </form>
+    <p id="nlThanks" style="display:none;margin-top:1rem;font-family:var(--serif);font-style:italic;font-size:1.2rem;color:var(--accent)">Thank you — you're on the list!</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="sec faq">
+  <div class="wrap narrow">
+    <span class="eyebrow center">FAQ</span>
+    <h2 class="center">Common questions</h2>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>What kind of work do you do?</summary>
+        <p>I work with individuals and groups using body-oriented and movement-based approaches. My background includes yoga teaching, Embodied Yin, neuroscience for somatics, and training in Somatic Experiencing (SE) — a physiological approach to trauma and stress developed by Peter A. Levine, which I am currently deepening through the three-year SEP programme. The focus is on helping people feel more at ease in their body — whether the starting point is stress, tension, overwhelm, or simply a wish to slow down.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What is Somatic Experiencing?</summary>
+        <p>Somatic Experiencing (SE) is a body-oriented approach to trauma and chronic stress, developed by Peter A. Levine. It draws on the nervous system's innate capacity to self-regulate, helping to release energy that became stuck during overwhelming experiences. I am currently training in this approach as part of the three-year SEP programme.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Do I need experience with bodywork or movement?</summary>
+        <p>No. Everything starts from where you are right now. No background in yoga, dance, meditation, or therapy is needed. All that is required is some curiosity and a willingness to slow down.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Is this therapy?</summary>
+        <p>I am training as an SE practitioner (SEP programme) and am not a licensed psychologist or psychotherapist. The work is health-supporting and body-oriented, but it is not a substitute for professional psychiatric or psychological care. If you are unsure whether this work is right for you, feel free to reach out and we can talk it through.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Is touch involved?</summary>
+        <p>In workshops there is no obligatory touch. In individual sessions, light touch may be offered as part of the body-oriented work — always with your explicit, ongoing consent. You are always in charge of what happens, and nothing is assumed.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Do you offer online sessions?</summary>
+        <p>Yes. Individual sessions are available both in Oslo and online. Body-oriented work translates surprisingly well to video — we work with what your nervous system brings into the space, wherever you are.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What is the cancellation policy?</summary>
+        <p>Full refund more than 7 days before. 50% refund 3–7 days before. No refund under 3 days, but your spot can be transferred to another date or person.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="sec kontakt">
+  <div class="wrap narrow center">
+    <span class="eyebrow">Let's talk</span>
+    <h2>Get in touch</h2>
+    <p>Book a session, ask a question, or enquire about what might suit you or your group.</p>
+    <form class="contact-form" id="contactForm" onsubmit="handleContact(event)">
+      <div class="form-row">
+        <input type="text" placeholder="Name" required>
+        <input type="email" placeholder="Email" required>
+      </div>
+      <select>
+        <option value="">What is this about?</option>
+        <option>Individual session</option>
+        <option>Primal Play</option>
+        <option>Ekte Møter i Blomstring</option>
+        <option>Workshop / group</option>
+        <option>Organisation</option>
+        <option>Other</option>
+      </select>
+      <textarea rows="5" placeholder="Message — what can I help you with?"></textarea>
+      <button type="submit" class="btn btn-dark">Send message</button>
+    </form>
+    <div class="form-success" id="formSuccess">
+      Thank you! I'll be in touch shortly.
+    </div>
+    <div class="contact-alt">
+      <p>Or email directly: <a href="mailto:embodied.awareness.no@gmail.com">embodied.awareness.no@gmail.com</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <img src="" alt="Embodied Awareness" style="height:40px;width:40px;display:block;margin-bottom:.4rem">
+      <p>Henrik Kjellmo Larsen · Oslo</p>
+    </div>
+    <nav class="footer-links">
+      <a href="#about">About</a>
+      <a href="#approach">Approach</a>
+      <a href="#work">Work</a>
+      <a href="#events">Events</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/embodied.awareness/" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </div>
+  <p class="footer-copy wrap">© 2025 Embodied Awareness</p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',scrollY>24)
+},{ passive:true })
+
+function toggleMenu(){
+  document.getElementById('navLinks').classList.toggle('open')
+}
+document.querySelectorAll('.nav-links a').forEach(a=>
+  a.addEventListener('click',()=>document.getElementById('navLinks').classList.remove('open'))
+)
+
+function handleNL(e){
+  e.preventDefault()
+  document.getElementById('nlForm').style.display='none'
+  document.getElementById('nlThanks').style.display='block'
+}
+
+function handleContact(e){
+  e.preventDefault()
+  document.getElementById('contactForm').style.display='none'
+  document.getElementById('formSuccess').style.display='block'
+}
+
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('shown') })
+},{threshold:.08})
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))
+</script>
